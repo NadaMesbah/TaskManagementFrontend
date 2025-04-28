@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { PencilSquareIcon, TrashIcon, UserIcon } from '@heroicons/react/24/solid'; // Heroicons for icons
+import { Link } from 'react-router-dom';
+import { UserIcon } from '@heroicons/react/24/solid'; // Heroicons for icons
 
-const statuses = ['TODO', 'IN_PROGRESS', 'COMPLETED'];
+const statuses = ["TODO", "IN_PROGRESS", "COMPLETED", "CLOSED"];
 
 const priorityColors = {
-  High: 'bg-red-200 text-red-800',
-  Medium: 'bg-yellow-200 text-yellow-800',
-  Low: 'bg-green-200 text-green-800',
+  HIGH: 'bg-red-200 text-red-800',
+  MEDIUM: 'bg-yellow-200 text-yellow-800',
+  LOW: 'bg-green-200 text-green-800',
+};
+
+const statusColors = {
+  TODO: 'bg-gray-300 text-gray-800',
+  IN_PROGRESS: 'bg-yellow-300 text-yellow-800',
+  COMPLETED: 'bg-green-300 text-green-800',
+  CLOSED: 'bg-red-300 text-red-800',
 };
 
 const KanbanBoard = () => {
   const [tasks, setTasks] = useState([]);
   const [employees, setEmployees] = useState([]);
-  const [editingTaskId, setEditingTaskId] = useState(null);
-  const [form, setForm] = useState({
-    title: '',
-    description: '',
-    priority: 'Low',
-    status: 'TODO',
-    assignedEmployeeId: ''
-  });
 
   useEffect(() => {
     fetchTasks();
@@ -45,81 +45,74 @@ const KanbanBoard = () => {
     }
   };
 
+  const shortenDescription = (description, wordLimit = 10) => {
+    const words = description.split(' ');
+    if (words.length <= wordLimit) {
+      return description;
+    }
+    return words.slice(0, wordLimit).join(' ') + '...';
+  };
+
   const getEmployeeUsername = (employeeId) => {
     const employee = employees.find(emp => emp.id === employeeId);
     return employee ? employee.username : 'Unassigned';
   };
 
-  const handleEdit = (task) => {
-    setForm({
-      title: task.title,
-      description: task.description,
-      priority: task.priority,
-      status: task.status,
-      assignedEmployeeId: task.assignedEmployeeId
-    });
-    setEditingTaskId(task.taskId);
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:8080/tasks/delete/${id}`);
-      fetchTasks();
-    } catch (error) {
-      console.error('Error deleting task:', error);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-4xl font-bold text-center mb-8 text-blue-700">Kanban Board</h1>
+      <h1 className="text-4xl font-bold text-center mb-8 text-blue-700">Task Board</h1>
 
-      {/* Task Cards */}
-      <div className="flex space-x-8">
+      {/* Task Columns */}
+      <div className="flex space-x-6">
         {statuses.map((status) => (
-          <div key={status} className="w-1/3 bg-gray-200 p-4 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4 text-center">{status}</h2>
+          <div key={status} className="w-1/4 bg-gray-200 p-4 rounded-lg shadow-lg">
+            <h2 className="text-2xl font-bold mb-4 text-center">{status.replace('_', ' ')}</h2>
             <div className="space-y-4">
               {tasks
                 .filter(task => task.status === status)
                 .map((task) => (
-                  <div
-                    key={task.taskId}
-                    className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition"
-                  >
-                    <h3 className="text-xl font-semibold">{task.title}</h3>
-                    <p className="text-gray-600">{task.description}</p>
+                  <Link to={`/tasks/${task.taskId}`} key={task.taskId}>
+                    <div
+                      className="bg-white m-3 p-4 rounded-lg shadow-md hover:shadow-xl transition cursor-pointer"
+                    >
+                      <h3 className="text-xl font-semibold">{task.title}</h3>
 
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {/* Priority Badge */}
-                      <span className={`px-3 py-1 rounded-full text-sm ${priorityColors[task.priority]}`}>
-                        {task.priority}
-                      </span>
-
-                      {/* Status Badge */}
-                      <span className={`px-3 py-1 rounded-full text-sm ${priorityColors[task.status]}`}>
-                        {task.status}
-                      </span>
-                    </div>
-
-                    <div className="text-sm text-gray-500 space-y-1 mt-4">
-                      <p className="flex items-center gap-2">
-                        <UserIcon className="h-5 w-5 text-gray-500" />
-                        {getEmployeeUsername(task.assignedEmployeeId)}
+                      <p>
+                        {shortenDescription(task.description, 10)}
+                        <button
+                          style={{
+                            color: 'blue',
+                            border: 'none',
+                            background: 'none',
+                            marginLeft: '5px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          See more
+                        </button>
                       </p>
-                    </div>
 
-                    <div className="flex justify-end gap-4 mt-4">
-                      <PencilSquareIcon
-                        className="h-6 w-6 text-yellow-500 cursor-pointer hover:scale-110 transition-transform"
-                        onClick={() => handleEdit(task)}
-                      />
-                      <TrashIcon
-                        className="h-6 w-6 text-red-500 cursor-pointer hover:scale-110 transition-transform"
-                        onClick={() => handleDelete(task.taskId)}
-                      />
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        {/* Priority Badge */}
+                        <span className={`px-3 py-1 rounded-full text-sm ${priorityColors[task.priority]}`}>
+                          {task.priority}
+                        </span>
+
+                        {/* Status Badge */}
+                        <span className={`px-3 py-1 rounded-full text-sm ${statusColors[task.status]}`}>
+                          {task.status.replace('_', ' ')}
+                        </span>
+                      </div>
+
+                      <div className="text-sm text-gray-500 space-y-1 mt-4">
+                        <p className="flex items-center gap-2">
+                          <UserIcon className="h-5 w-5 text-gray-500" />
+                          {getEmployeeUsername(task.assignedEmployeeId)}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
             </div>
           </div>

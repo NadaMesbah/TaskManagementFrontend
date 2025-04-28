@@ -1,22 +1,29 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import KanbanBoard from './KanbanBoard'; 
+
 const EmployeeDashboard = () => {
-    return (
-      <div className="min-h-screen bg-gray-100 p-8">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">Employee Dashboard</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-              <h2 className="text-xl font-semibold mb-4">My Tasks</h2>
-              <p className="text-gray-600">Check and manage your daily tasks.</p>
-            </div>
-            <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-              <h2 className="text-xl font-semibold mb-4">Profile</h2>
-              <p className="text-gray-600">Update your personal information.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      
+      {/* Top Navbar */}
+      <header className="bg-blue-800 text-white p-6 flex items-center gap-10">
+        <h1 className="text-2xl font-bold">Employee Dashboard</h1>
+        <nav className="flex gap-6">
+          <Link to="/tasks" className="hover:text-blue-300 font-medium">My Tasks</Link>
+          
+          {/* links here */}
+        </nav>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 p-6 overflow-auto">
+        <KanbanBoard />
+      </main>
+
+    </div>
+  );
+};
   
   export default EmployeeDashboard;
   

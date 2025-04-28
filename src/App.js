@@ -8,9 +8,20 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import AdminDashboard from "./components/AdminDashboard";
 import EmployeeDashboard from "./components/EmployeeDashboard";
 import TaskPage from "./pages/TaskPage";
-import ProfilePage from "./pages/ProfilePage";
+import TaskDetailsPage from "./pages/TaskDetailsPage";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
+    const { loading } = useAuth();
+
+    if (loading) {
+        return (
+            <div className="flex flex-col justify-center items-center h-screen">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 mb-4"></div>
+                <p className="text-lg font-semibold text-gray-700">Loading...</p>
+            </div>
+        );
+    }
     return (
         <Router>
             <AuthProvider>
@@ -20,8 +31,8 @@ function App() {
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/verify" element={<Verify />} />
                     <Route path="/tasks" element={<TaskPage />} />
-                    <Route path="/profile" component={ProfilePage} />
-                    {/* Protected Admin Route */}
+                    <Route path="/tasks/:id" element={<TaskDetailsPage />} />
+
                     <Route
                         path="/admin"
                         element={
@@ -35,11 +46,12 @@ function App() {
                     <Route
                         path="/employee"
                         element={
-                            <ProtectedRoute allowedRoles={["EMPLOYEE", "ADMIN"]}>
+                            <ProtectedRoute allowedRoles={["EMPLOYEE"]}>
                                 <EmployeeDashboard />
                             </ProtectedRoute>
                         }
                     />
+
                 </Routes>
             </AuthProvider>
         </Router>

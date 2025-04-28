@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'; // Heroicons for icons
 
 const initialFormState = {
@@ -15,8 +17,10 @@ const initialFormState = {
 
 const TaskPage = () => {
   const [tasks, setTasks] = useState([]);
+  const navigate = useNavigate();
   const [employees, setEmployees] = useState([]); // 👈 added
   const [form, setForm] = useState(initialFormState);
+  const userRole = localStorage.getItem('role');
   const [editingTaskId, setEditingTaskId] = useState(null);
 
   useEffect(() => {
@@ -89,6 +93,14 @@ const TaskPage = () => {
     }
   };
 
+  const handleGoBack = () => {
+    if (userRole === 'ADMIN') {
+      navigate('/admin');
+    } else {
+      navigate('/employee');
+    }
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'TODO':
@@ -123,6 +135,13 @@ const TaskPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
+      <button
+        type="button"
+        onClick={handleGoBack}
+        className="w-30 bg-gray-300 text-black font-bold py-2 px-6 m-3 rounded-lg mt-4"
+      >
+        <ArrowLeftIcon className="h-5 w-5" />
+      </button>
       <h1 className="text-4xl font-bold text-center mb-8 text-blue-700">Task Manager</h1>
 
       {/* Form */}
@@ -144,7 +163,7 @@ const TaskPage = () => {
               />
             ) : null
           ))}
-          
+
           {/* Priority */}
           <select
             name="priority"
@@ -167,6 +186,7 @@ const TaskPage = () => {
             <option value="TODO">TODO</option>
             <option value="IN_PROGRESS">IN_PROGRESS</option>
             <option value="COMPLETED">COMPLETED</option>
+            <option value="COMPLETED">CLOSED</option>
           </select>
 
           {/* Assigned Employee */}
