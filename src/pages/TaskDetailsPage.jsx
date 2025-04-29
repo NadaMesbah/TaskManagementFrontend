@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import { useTranslation } from 'react-i18next';
 
 import axios from 'axios';
 
@@ -11,6 +11,7 @@ const TaskDetailsPage = () => {
     const [form, setForm] = useState(null);
     const [employees, setEmployees] = useState([]);
     const userRole = localStorage.getItem('role');
+    const { t } = useTranslation();
 
     useEffect(() => {
         const fetchTask = async () => {
@@ -42,20 +43,13 @@ const TaskDetailsPage = () => {
             [name]: value
         }));
     };
-    const handleGoBack = () => {
-        if (userRole === 'ADMIN') {
-            navigate('/admin');
-        } else {
-            navigate('/employee');
-        }
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await axios.post(`http://localhost:8080/tasks/update/${id}`, form);
             alert('Task updated successfully');
-            navigate('/tasks'); // Redirect back to tasks board
+            navigate('/tasks/all'); // Redirect back to tasks board
         } catch (error) {
             console.error('Error updating task:', error);
             alert('Failed to update task');
@@ -66,7 +60,7 @@ const TaskDetailsPage = () => {
         try {
             await axios.delete(`http://localhost:8080/tasks/delete/${id}`);
             alert('Task deleted successfully');
-            navigate('/tasks');
+            navigate('/tasks/all');
         } catch (error) {
             console.error('Error deleting task:', error);
             alert('Failed to delete task');
@@ -79,147 +73,155 @@ const TaskDetailsPage = () => {
 
     return (
         <div className="max-w-3xl mx-auto p-8 bg-white rounded-xl shadow-md mt-10">
-            <button
-                type="button"
-                onClick={handleGoBack}
-                className="w-30 bg-gray-300 text-black font-bold py-2 px-6 m-3 rounded-lg mt-4"
-            >
-                <ArrowLeftIcon className="h-5 w-5" />
-            </button>
-            <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">Task Details</h1>
-
+            <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">{t('task_details')}</h1>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+
                 {/* Title */}
-                <input
-                    type="text"
-                    name="title"
-                    value={form.title}
-                    onChange={handleChange}
-                    readOnly={!isAdmin}
-                    className={`w-full border p-2 rounded-lg ${!isAdmin ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                />
+                <div>
+                    <label className="block font-medium mb-1">{t('title')}</label>
+                    <input
+                        type="text"
+                        name="title"
+                        value={form.title}
+                        onChange={handleChange}
+                        readOnly={!isAdmin}
+                        className={`w-full border p-2 rounded-lg ${!isAdmin ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    />
+                </div>
 
                 {/* Description */}
-                <textarea
-                    name="description"
-                    value={form.description}
-                    onChange={handleChange}
-                    readOnly={!isAdmin}
-                    className={`w-full border p-2 rounded-lg ${!isAdmin ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                    rows="4"
-                />
+                <div>
+                    <label className="block font-medium mb-1">{t('description')}</label>
+                    <textarea
+                        name="description"
+                        value={form.description}
+                        onChange={handleChange}
+                        readOnly={!isAdmin}
+                        className={`w-full border p-2 rounded-lg ${!isAdmin ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                        rows="4"
+                    />
+                </div>
 
                 {/* Deadline */}
-                {isAdmin ? (
+                <div>
+                    <label className="block font-medium mb-1">{t('deadline')}</label>
                     <input
                         type="date"
                         name="deadline"
                         value={form.deadline}
                         onChange={handleChange}
-                        className="w-full border p-2 rounded-lg"
+                        readOnly={!isAdmin}
+                        disabled={!isAdmin}
+                        className={`w-full border p-2 rounded-lg ${!isAdmin ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                     />
-                ) : (
-                    <input
-                        type="date"
-                        name="deadline"
-                        value={form.deadline}
-                        readOnly
-                        disabled
-                        className="w-full border p-2 rounded-lg bg-gray-100 cursor-not-allowed"
-                    />
-                )}
+                </div>
 
                 {/* Estimated Duration */}
-                <input
-                    type="number"
-                    name="estimatedDuration"
-                    value={form.estimatedDuration}
-                    onChange={handleChange}
-                    readOnly={!isAdmin}
-                    placeholder="Estimated Duration (hours)"
-                    className={`w-full border p-2 rounded-lg ${!isAdmin ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                />
+                <div>
+                    <label className="block font-medium mb-1">{t('estimated_duration')}</label>
+                    <input
+                        type="number"
+                        name="estimatedDuration"
+                        value={form.estimatedDuration}
+                        onChange={handleChange}
+                        readOnly={!isAdmin}
+                        className={`w-full border p-2 rounded-lg ${!isAdmin ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    />
+                </div>
 
-                {/* Actual Duration (Always editable for Employee and Admin) */}
-                <input
-                    type="number"
-                    name="actualDuration"
-                    value={form.actualDuration}
-                    onChange={handleChange}
-                    placeholder="Actual Duration (hours)"
-                    className="w-full border p-2 rounded-lg"
-                />
+                {/* Actual Duration */}
+                <div>
+                    <label className="block font-medium mb-1">{t('actual_duration')}</label>
+                    <input
+                        type="number"
+                        name="actualDuration"
+                        value={form.actualDuration}
+                        onChange={handleChange}
+                        className="w-full border p-2 rounded-lg"
+                    />
+                </div>
 
                 {/* Priority */}
-                {isAdmin ? (
-                    <select
-                        name="priority"
-                        value={form.priority}
-                        onChange={handleChange}
-                        className="w-full border p-2 rounded-lg"
-                    >
-                        <option value="LOW">LOW</option>
-                        <option value="MEDIUM">MEDIUM</option>
-                        <option value="HIGH">HIGH</option>
-                    </select>
-                ) : (
-                    <input
-                        type="text"
-                        value={form.priority}
-                        readOnly
-                        disabled
-                        className="w-full border p-2 rounded-lg bg-gray-100 cursor-not-allowed"
-                    />
-                )}
+                <div>
+                    <label className="block font-medium mb-1">{t('priority')}</label>
+                    {isAdmin ? (
+                        <select
+                            name="priority"
+                            value={form.priority}
+                            onChange={handleChange}
+                            className="w-full border p-2 rounded-lg"
+                        >
+                            <option value="LOW">{t('low')}</option>
+                            <option value="MEDIUM">{t('medium')}</option>
+                            <option value="HIGH">{t('high')}</option>
+                        </select>
+                    ) : (
+                        <input
+                            type="text"
+                            value={form.priority}
+                            readOnly
+                            disabled
+                            className="w-full border p-2 rounded-lg bg-gray-100 cursor-not-allowed"
+                        />
+                    )}
+                </div>
 
                 {/* Status */}
-                {isAdmin ? (
-                    <select
-                        name="status"
-                        value={form.status}
-                        onChange={handleChange}
-                        className="w-full border p-2 rounded-lg"
-                    >
-                        <option value="TODO">TODO</option>
-                        <option value="IN_PROGRESS">IN_PROGRESS</option>
-                        <option value="COMPLETED">COMPLETED</option>
-                        <option value="CLOSED">CLOSED</option>
-                    </select>
-                ) : (
-                    <input
-                        type="text"
-                        value={form.status}
-                        readOnly
-                        disabled
-                        className="w-full border p-2 rounded-lg bg-gray-100 cursor-not-allowed"
-                    />
-                )}
-                {/* Assigned Employee */}
-                {isAdmin ? (
-                    <select
-                        name="assignedEmployeeId"
-                        value={form.assignedEmployeeId}
-                        onChange={handleChange}
-                        className="border rounded-lg p-3 w-full"
-                    >
-                        <option value="">Select Employee</option>
-                        {employees.map((employee) => (
-                            <option key={employee.id} value={employee.id}>
-                                {employee.username}
-                            </option>
-                        ))}
-                    </select>
-                ) : (
-                    <input
-                        type="text"
-                        value={form.assignedEmployeeId}
-                        readOnly
-                        disabled
-                        className="w-full border p-2 rounded-lg bg-gray-100 cursor-not-allowed"
-                    />
-                )}
+                <div>
+                    <label className="block font-medium mb-1">{t('status')}</label>
+                    {isAdmin ? (
+                        <select
+                            name="status"
+                            value={form.status}
+                            onChange={handleChange}
+                            className="w-full border p-2 rounded-lg"
+                        >
+                            <option value="TODO">{t('todo')}</option>
+                            <option value="IN_PROGRESS">{t('in_progress')}</option>
+                            <option value="COMPLETED">{t('completed')}</option>
+                            <option value="CLOSED">{t('closed')}</option>
+                        </select>
+                    ) : (
+                        <input
+                            type="text"
+                            value={form.status}
+                            readOnly
+                            disabled
+                            className="w-full border p-2 rounded-lg bg-gray-100 cursor-not-allowed"
+                        />
+                    )}
+                </div>
 
+                {/* Assigned Employee */}
+                <div>
+                    <label className="block font-medium mb-1">{t('assigned_employee')}</label>
+                    {isAdmin ? (
+                        <select
+                            name="assignedEmployeeId"
+                            value={form.assignedEmployeeId}
+                            onChange={handleChange}
+                            className="border rounded-lg p-3 w-full"
+                        >
+                            <option value="">{t('select_employee')}</option>
+                            {employees.map((employee) => (
+                                <option key={employee.id} value={employee.id}>
+                                    {employee.username}
+                                </option>
+                            ))}
+                        </select>
+                    ) : (
+                        <input
+                            type="text"
+                            value={
+                                employees.find((emp) => emp.id === form.assignedEmployeeId)?.username || 'Unassigned'
+                            }
+                            readOnly
+                            disabled
+                            className="w-full border p-2 rounded-lg bg-gray-100 cursor-not-allowed"
+                        />
+                    )}
+                </div>
 
                 {/* Buttons */}
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
@@ -227,7 +229,7 @@ const TaskDetailsPage = () => {
                         type="submit"
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg"
                     >
-                        Save Changes
+                       {t('save_changes')}
                     </button>
 
                     {isAdmin && (
@@ -236,7 +238,7 @@ const TaskDetailsPage = () => {
                             onClick={handleDelete}
                             className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg"
                         >
-                            Delete Task
+                            {t('delete_task')}
                         </button>
                     )}
                 </div>

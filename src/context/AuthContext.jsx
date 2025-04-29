@@ -50,6 +50,7 @@ export function AuthProvider({ children }) {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
+      
       setUser({ token: data.token, role: data.role });
 
       if (data.role === "ADMIN") {
@@ -97,7 +98,6 @@ export function AuthProvider({ children }) {
     setUser(null);
     navigate("/login", { replace: true });
   };
-  
   
   return (
     <AuthContext.Provider value={{ user, login, signup, verify, logout, loading }}>

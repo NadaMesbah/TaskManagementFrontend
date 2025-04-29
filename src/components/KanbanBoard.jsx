@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { UserIcon } from '@heroicons/react/24/solid'; // Heroicons for icons
 
@@ -21,6 +22,7 @@ const statusColors = {
 const KanbanBoard = () => {
   const [tasks, setTasks] = useState([]);
   const [employees, setEmployees] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchTasks();
@@ -55,18 +57,18 @@ const KanbanBoard = () => {
 
   const getEmployeeUsername = (employeeId) => {
     const employee = employees.find(emp => emp.id === employeeId);
-    return employee ? employee.username : 'Unassigned';
+    return employee ? employee.username : t('unassigned');
   };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-4xl font-bold text-center mb-8 text-blue-700">Task Board</h1>
+      <h1 className="text-4xl font-bold text-center mb-8 text-blue-700">{t('task_board')}</h1>
 
       {/* Task Columns */}
       <div className="flex space-x-6">
         {statuses.map((status) => (
           <div key={status} className="w-1/4 bg-gray-200 p-4 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4 text-center">{status.replace('_', ' ')}</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">{t(status.toLowerCase())}</h2>
             <div className="space-y-4">
               {tasks
                 .filter(task => task.status === status)
@@ -75,7 +77,7 @@ const KanbanBoard = () => {
                     <div
                       className="bg-white m-3 p-4 rounded-lg shadow-md hover:shadow-xl transition cursor-pointer"
                     >
-                      <h3 className="text-xl font-semibold">{task.title}</h3>
+                      <h3 className="text-xl font-semibold">{t(task.title.toLowerCase())}</h3>
 
                       <p>
                         {shortenDescription(task.description, 10)}
@@ -89,19 +91,19 @@ const KanbanBoard = () => {
                             fontWeight: 'bold'
                           }}
                         >
-                          See more
+                          {t('see_more')}
                         </button>
                       </p>
 
                       <div className="flex flex-wrap gap-2 mt-4">
                         {/* Priority Badge */}
                         <span className={`px-3 py-1 rounded-full text-sm ${priorityColors[task.priority]}`}>
-                          {task.priority}
+                        {t(task.priority.toLowerCase())}
                         </span>
 
                         {/* Status Badge */}
                         <span className={`px-3 py-1 rounded-full text-sm ${statusColors[task.status]}`}>
-                          {task.status.replace('_', ' ')}
+                        {t(task.status.toLowerCase())}
                         </span>
                       </div>
 
