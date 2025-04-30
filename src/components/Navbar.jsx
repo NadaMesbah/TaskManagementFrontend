@@ -27,6 +27,17 @@ const Navbar = () => {
             {t('employees')}
           </Link>
         )}
+        {role === "ADMIN" && (
+          <Link
+          to="/stats"
+          className="hover:text-blue-300 text-lg font-medium transition duration-150"
+      
+        >
+          Statistics
+        </Link>
+          
+        )}
+        
 
         <button
           onClick={() => logout(navigate)}

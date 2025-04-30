@@ -8,6 +8,7 @@ import WelcomePage from "./pages/WelcomePage";
 import TaskCreatePage from "./pages/TaskCreatePage";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import AdminDashboard from "./components/AdminDashboard";
+import StatsDashboard from "./components/StatsBoard";
 import EmployeeDashboard from "./components/EmployeeDashboard";
 import TaskPage from "./pages/TaskPage";
 import TaskDetailsPage from "./pages/TaskDetailsPage";
@@ -51,6 +52,7 @@ function App() {
                         <Route path="/employees/add" element={<AddEmployeePage />} />
                         <Route path="/employees/summary" element={<ManageEmployeesPage />} />
                         <Route path="/tasks/all" element={<TaskPage />} />
+                        <Route path="/stats/" element={<StatsDashboard />} />
                         <Route path="/tasks/:id" element={<TaskDetailsPage />} />
                         <Route path="/tasks/create" element={<TaskCreatePage />} />
                         <Route path="/employee" element={<EmployeeDashboard />} />
