@@ -70,5 +70,15 @@
     "EnterVerificationCode": "Enter your verification code",
     "Verify": "Verify",
     "NoEmailProvided": "No email provided. Please sign up again.",
-    "ErrorOccurred": "An error occurred"
+    "ErrorOccurred": "An error occurred",
+    "task_stats": "Task Statistics",
+    "task_status": "Tasks by Status",
+    "task_priority": "Tasks by Priority",
+    "day": "Tasks Created per Day",
+    "week": "Tasks Created per Week",
+    "beforeAfter": "Completed Before vs After Deadline",
+    "before" : "Completed Before Deadline",
+    "after" : "Completed After Deadline",
+    "noData": "No data available",
+    "stats": "Statistics"
 }

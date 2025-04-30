@@ -70,5 +70,15 @@
     "EnterVerificationCode": "Entrez votre code de vérification",
     "Verify": "Vérifier",
     "NoEmailProvided": "Aucun email fourni. Veuillez vous réinscrire.",
-    "ErrorOccurred": "Une erreur s'est produite"
+    "ErrorOccurred": "Une erreur s'est produite",
+    "task_stats": "Statistiques des Tâches",
+    "task_status": "Tâches par Statut",
+    "task_priority": "Tâches par Priorité",
+    "day": "Tâches Créées par Jour",
+    "week": "Tâches Créées par Semaine",
+    "beforeAfter": "Tâches Terminées Avant / Après la Date Limite",
+    "before" : "Terminées Avant la Date Limite",
+    "after" : "Terminées Après la Date Limite",
+    "noData": "Aucune donnée disponible",
+    "stats": "Statistiques"
 }

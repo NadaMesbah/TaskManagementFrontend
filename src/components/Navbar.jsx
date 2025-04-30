@@ -33,7 +33,7 @@ const Navbar = () => {
           className="hover:text-blue-300 text-lg font-medium transition duration-150"
       
         >
-          Statistics
+         {t('stats')}
         </Link>
           
         )}
