@@ -4,7 +4,7 @@ import {
     Chart as ChartJS, CategoryScale, LinearScale, BarElement,
     PointElement, LineElement, ArcElement, Title, Tooltip, Legend,
 } from 'chart.js';
-import { Bar, Line, Doughnut } from 'react-chartjs-2';
+import { Bar, Doughnut } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
 
 ChartJS.register(
@@ -22,34 +22,58 @@ ChartJS.register(
 const centerTextPlugin = {
     id: 'centerText',
     afterDraw: (chart) => {
-      if (chart.config.type !== 'doughnut') return;
-  
-      const { ctx } = chart;
-      const data = chart.data.datasets[0].data;
-      const labels = chart.data.labels;
-  
-      if (!data.length) return;
-  
-      const maxIndex = data.indexOf(Math.max(...data));
-      const label = labels[maxIndex];
-      const value = data[maxIndex];
-  
-      const text = `${label}: ${value}`;
-      
-      ctx.save();
-      const centerX = chart.getDatasetMeta(0).data[0].x;
-      const centerY = chart.getDatasetMeta(0).data[0].y;
-      ctx.font = 'bold 18px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = '#333';
-      ctx.fillText(text, centerX, centerY);
-      ctx.restore();
+        if (chart.config.type !== 'doughnut') return;
+
+        const { ctx } = chart;
+        const data = chart.data.datasets[0].data;
+        const labels = chart.data.labels;
+
+        if (!data.length) return;
+
+        const entries = labels.map((label, i) => ({
+            label,
+            value: data[i],
+        }));
+
+        const centerX = chart.getDatasetMeta(0).data[0].x;
+        const centerY = chart.getDatasetMeta(0).data[0].y;
+
+        ctx.save();
+        ctx.font = 'bold 14px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#333';
+
+        const lineHeight = 18;
+        const totalHeight = entries.length * lineHeight;
+        const startY = centerY - totalHeight / 2 + lineHeight / 2;
+
+        entries.forEach((entry, index) => {
+            const text = `${entry.label}: ${entry.value}`;
+            ctx.fillText(text, centerX, startY + index * lineHeight);
+        });
+
+        ctx.restore();
     },
-  };
-  
+};
+
 
 ChartJS.register(centerTextPlugin);
+
+// Helper: color palette
+const getColors = (count) => {
+    const palette = [
+        '#4dc9f6', '#f67019', '#f53794',
+        '#537bc4', '#acc236', '#166a8f',
+        '#00a950', '#58595b', '#8549ba',
+        '#e6e600', '#33cccc', '#ff6699'
+    ];
+    const colors = [];
+    for (let i = 0; i < count; i++) {
+        colors.push(palette[i % palette.length]);
+    }
+    return colors;
+};
 
 export default function StatsDashboard() {
     const { t } = useTranslation();
@@ -61,6 +85,16 @@ export default function StatsDashboard() {
     const [beforeAfter, setBeforeAfter] = useState({});
 
     useEffect(() => {
+
+        const expectedStatuses = ['TODO', 'IN_PROGRESS', 'COMPLETED', 'CLOSED'];
+        
+        const fillMissingStatuses = (dataObj) => {
+            const filled = {};
+            expectedStatuses.forEach(status => {
+                filled[status] = dataObj[status] || 0;
+            });
+            return filled;
+        };
         const fetchStats = async () => {
             try {
                 const [statusRes, priorityRes, dayRes, weekRes, beforeAfterRes] = await Promise.all([
@@ -70,7 +104,7 @@ export default function StatsDashboard() {
                     axios.get('/stats/tasks-by-week'),
                     axios.get('/stats/completed-before-after-deadline'),
                 ]);
-                setByStatus(statusRes.data);
+                setByStatus(fillMissingStatuses(statusRes.data));
                 setByPriority(priorityRes.data);
                 setByDay(dayRes.data);
                 setByWeek(weekRes.data);
@@ -82,16 +116,24 @@ export default function StatsDashboard() {
         fetchStats();
     }, []);
 
+    const LabelMap = {
+        IN_PROGRESS: t('in_progress'),
+        TODO: t('todo'),
+        CLOSED: t('closed'),
+        COMPLETED: t('completed'),
+        HIGH: t('high'),
+        MEDIUM: t('medium'),
+        LOW: t('low'),
+        BeforeDeadline: t('before'),
+        AfterDeadline: t('after')
+    };
+
+    const isEmptyData = (dataObj) => !dataObj || Object.keys(dataObj).length === 0;
+
     const toChartData = (dataObj, label = '') => {
         const labels = Object.keys(dataObj).map(key => LabelMap[key] || key);
         const values = Object.values(dataObj);
-        const colors = [
-            'rgba(75, 192, 192, 0.5)',
-            'rgba(255, 99, 132, 0.5)',
-            'rgba(205, 98, 181, 0.5)',
-            'rgba(255, 206, 86, 0.5)',
-        ];
-        const borderColors = colors.map(c => c.replace('0.5', '1'));
+        const colors = getColors(labels.length);
 
         return {
             labels,
@@ -99,15 +141,20 @@ export default function StatsDashboard() {
                 {
                     label,
                     data: values,
-                    backgroundColor: colors.slice(0, labels.length),
-                    borderColor: borderColors.slice(0, labels.length),
+                    backgroundColor: colors,
+                    borderColor: colors,
                     borderWidth: 1,
+                    borderRadius: 4,
+                    barThickness: 12,
+                    categoryPercentage: 0.6,
+                    barPercentage: 0.9,
+                    pointBackgroundColor: colors,
+                    tension: 0.4,
+                    fill: false,
                 },
             ],
         };
     };
-
-    const isEmptyData = (dataObj) => !dataObj || Object.keys(dataObj).length === 0;
 
     const doughnutOptions = {
         responsive: true,
@@ -116,16 +163,7 @@ export default function StatsDashboard() {
             legend: { position: 'bottom' },
         },
     };
-    const LabelMap = {
-        IN_PROGRESS: t('in_progress'),
-        TODO: t('todo'),
-        CLOSED: t('closed'),
-        COMPLETED: t('completed'),
-        HIGH: t('high'),
-        MEDIUM: t('medium'),
-        LOW: t('low')
-    };
-      
+
     const barOptions = {
         responsive: true,
         scales: {
@@ -134,19 +172,40 @@ export default function StatsDashboard() {
                 ticks: {
                     precision: 0,
                 },
+                grid: {
+                    drawBorder: false,
+                },
+            },
+            x: {
+                grid: {
+                    display: false,
+                },
             },
         },
-        plugins: {
-            legend: { position: 'top' },
-        },
-    };
-
-    const lineOptions = {
-        responsive: true,
         plugins: {
             legend: { display: false },
         },
     };
+
+    // const lineOptions = {
+    //     responsive: true,
+    //     plugins: {
+    //         legend: { display: false },
+    //     },
+    //     scales: {
+    //         y: {
+    //             beginAtZero: true,
+    //             grid: {
+    //                 drawBorder: false,
+    //             },
+    //         },
+    //         x: {
+    //             grid: {
+    //                 display: false,
+    //             },
+    //         },
+    //     },
+    // };
 
     return (
         <div className="p-6">
@@ -159,10 +218,11 @@ export default function StatsDashboard() {
                     {isEmptyData(byStatus) ? (
                         <p>{t('noData')}</p>
                     ) : (
-                        <Doughnut data={toChartData(byStatus, 'Tasks')} 
-                        options={{ plugins: { legend: { position: 'bottom' } } }}
-                        plugins={[centerTextPlugin]} />
-                        
+                        <Doughnut
+                            data={toChartData(byStatus, 'Tasks')}
+                            options={doughnutOptions}
+                            plugins={[centerTextPlugin]}
+                        />
                     )}
                 </div>
 
@@ -182,7 +242,7 @@ export default function StatsDashboard() {
                     {isEmptyData(byDay) ? (
                         <p>{t('noData')}</p>
                     ) : (
-                        <Line data={toChartData(byDay, 'Count')} options={lineOptions} />
+                        <Bar data={toChartData(byDay, 'Tasks')} options={barOptions} />
                     )}
                 </div>
 
@@ -192,8 +252,7 @@ export default function StatsDashboard() {
                     {isEmptyData(byWeek) ? (
                         <p>{t('noData')}</p>
                     ) : (
-                        <Line data={toChartData(byWeek, 'Count')} options={lineOptions} />
-                    )}
+                        <Bar data={toChartData(byWeek, 'Tasks')} options={barOptions} />)}
                 </div>
 
                 {/* Completed Before vs After Deadline - Doughnut */}
@@ -204,12 +263,15 @@ export default function StatsDashboard() {
                     ) : (
                         <div className="flex justify-center items-center">
                             <div className="w-1/2">
-                                <Doughnut data={toChartData(beforeAfter, 'Tasks')} options={doughnutOptions} />
+                                <Doughnut
+                                    data={toChartData(beforeAfter, 'Tasks')}
+                                    options={doughnutOptions}
+                                    plugins={[centerTextPlugin]}
+                                />
                             </div>
                         </div>
                     )}
                 </div>
-
             </div>
         </div>
     );
