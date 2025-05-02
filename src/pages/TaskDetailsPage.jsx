@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Swal from 'sweetalert2';
 
 import axios from 'axios';
 
@@ -48,23 +49,44 @@ const TaskDetailsPage = () => {
         e.preventDefault();
         try {
             await axios.post(`http://localhost:8080/tasks/update/${id}`, form);
-            alert('Task updated successfully');
-            navigate('/tasks/all'); // Redirect back to tasks board
-        } catch (error) {
-            console.error('Error updating task:', error);
-            alert('Failed to update task');
-        }
+            Swal.fire({
+              icon: 'success',
+              title: t('taskUpdatedTitle'),
+              text: t('updateSuccess'),
+            }).then(() => {
+              navigate('/tasks/all');
+            });
+          } catch (error) {
+            Swal.fire({
+              icon: 'error',
+              title: t('updateFailed'),
+              text: t('updateError'),
+            });
+          }          
     };
 
     const handleDelete = async () => {
-        try {
-            await axios.delete(`http://localhost:8080/tasks/delete/${id}`);
-            alert('Task deleted successfully');
-            navigate('/tasks/all');
-        } catch (error) {
-            console.error('Error deleting task:', error);
-            alert('Failed to delete task');
-        }
+        Swal.fire({
+            title: t('deleteConfirmTitle'),
+            text: t('deleteConfirmText'),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: t('yesdelete')
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              try {
+                await axios.delete(`http://localhost:8080/tasks/delete/${id}`);
+                Swal.fire(t('deleteConfirmed'), t('deleteSuccess'), 'success').then(() => {
+                  navigate('/tasks/all');
+                });
+              } catch (error) {
+                Swal.fire(t('failed'), t('deleteError'), 'error');
+              }
+            }
+          });
+          
     };
 
     if (!task || !form) return <div className="p-8">Loading...</div>;

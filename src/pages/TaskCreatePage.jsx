@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Swal from 'sweetalert2';
 
 const initialFormState = {
   title: '',
@@ -45,11 +46,20 @@ const CreateTaskPage = () => {
     e.preventDefault();
     try {
       await axios.post('http://localhost:8080/tasks/add', form);
+      Swal.fire({
+        icon: 'success',
+        title: t('taskCreatedTitle'),
+        text: t('taskCreatedText'),
+      });
       setForm(initialFormState);
       navigate('/tasks/all');
     } catch (error) {
-      console.error('Error creating task:', error);
-    }
+      Swal.fire({
+        icon: 'error',
+        title: t('failed'),
+        text: t('createError'),
+      });
+    }    
   };
 
   return (

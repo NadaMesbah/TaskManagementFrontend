@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from 'react-i18next';
+import Swal from 'sweetalert2';
 
 
 const AddEmployeePage = () => {
@@ -27,12 +28,19 @@ const AddEmployeePage = () => {
 
     try {
       await axios.post("http://localhost:8080/employees/add", form);
-      setMessage("✅ Employee added successfully!");
+      Swal.fire({
+        icon: 'success',
+        title: t('employee_added'),
+        text: t('employee_addedText'),
+      });
       setForm({ username: "", email: "", password: "" });
     } catch (error) {
-      console.error(error);
-      setMessage("❌ Failed to add employee.");
-    }
+      Swal.fire({
+        icon: 'error',
+        title: t('failed'),
+        text: t('failedtoadd'),
+      });
+    }    
   };
 
   return (
