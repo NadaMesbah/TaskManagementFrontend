@@ -152,7 +152,7 @@ const TaskDetailsPage = () => {
                     />
                 </div>
 
-                {/* Actual Duration */}
+                {/* Actual Duration - to update */} 
                 <div>
                     <label className="block font-medium mb-1">{t('actual_duration')}</label>
                     <input

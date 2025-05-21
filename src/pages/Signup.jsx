@@ -9,6 +9,8 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
   const { signup } = useAuth();
@@ -20,7 +22,7 @@ const Signup = () => {
       return;
     }
     try {
-      await signup(email, username, password);
+      await signup(email, username, password, firstname, lastname, navigate);
       navigate("/verify", { state: { email: email } });
     } catch (error) {
       console.error("Signup failed:", error);
@@ -43,6 +45,16 @@ const Signup = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700">{t("Username")}</label>
               <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full mt-1 px-4 py-2 border rounded-lg shadow-sm" placeholder={t("EnterUsername")} required />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">{t("FirstName")}</label>
+              <input type="text" value={firstname} onChange={(e) => setFirstname(e.target.value)} className="w-full mt-1 px-4 py-2 border rounded-lg shadow-sm" placeholder={t("EnterFirstname")} required />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">{t("LastName")}</label>
+              <input type="text" value={lastname} onChange={(e) => setLastname(e.target.value)} className="w-full mt-1 px-4 py-2 border rounded-lg shadow-sm" placeholder={t("EnterLastname")} required />
             </div>
 
             <div>

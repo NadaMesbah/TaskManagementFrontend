@@ -262,7 +262,7 @@ export default function StatsDashboard() {
                         <p>{t('noData')}</p>
                     ) : (
                         <div className="flex justify-center items-center">
-                            <div className="w-1/2">
+                            <div className="w-1/2 h-96">
                                 <Doughnut
                                     data={toChartData(beforeAfter, 'Tasks')}
                                     options={doughnutOptions}

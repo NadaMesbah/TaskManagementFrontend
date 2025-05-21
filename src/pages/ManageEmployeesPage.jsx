@@ -42,6 +42,8 @@ const ManageEmployeesPage = () => {
               <tr>
                 <th className="px-6 py-3 border-r">{t('username')}</th>
                 <th className="px-6 py-3 border-r">Email</th>
+                <th className="px-6 py-3 border-r">{t('FirstName')}</th>
+                <th className="px-6 py-3 border-r">{t('LastName')}</th>
                 <th className="px-6 py-3 border-r">{t('total_tasks')}</th>
                 <th className="px-6 py-3 border-r">{t('completed')}</th>
                 <th className="px-6 py-3 border-r">{t('in_progress')}</th>
@@ -56,6 +58,8 @@ const ManageEmployeesPage = () => {
                 >
                   <td className="px-6 py-4 border-r font-medium">{emp.username}</td>
                   <td className="px-6 py-4 border-r">{emp.email}</td>
+                  <td className="px-6 py-4 border-r">{emp.firstname}</td>
+                  <td className="px-6 py-4 border-r">{emp.lastname}</td>
                   <td className="px-6 py-4 border-r">{emp.totalTasks}</td>
                   <td className="px-6 py-4 border-r text-green-600">{emp.completedTasks}</td>
                   <td className="px-6 py-4 border-r text-yellow-600">{emp.inProgressTasks}</td>

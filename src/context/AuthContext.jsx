@@ -64,20 +64,20 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const signup = async (email, username, password, navigate) => {
+  const signup = async (email, username, password, firstname, lastname, navigate) => {
     try {
       await axios.post(
         "http://localhost:8080/auth/signup",
-        { email, username, password },
+        { email, username, password, firstname, lastname },
         { withCredentials: true }
       );
-      navigate("/verify");
+      navigate("/verify", { state: { email } });
     } catch (error) {
       console.error("Signup failed:", error);
       alert("Signup failed: " + (error?.response?.data?.message || "Unexpected error"));
     }
   };
-
+  
   const verify = async (email, verificationCode, navigate) => {
     try {
       await axios.post(
