@@ -218,11 +218,15 @@ export default function StatsDashboard() {
                     {isEmptyData(byStatus) ? (
                         <p>{t('noData')}</p>
                     ) : (
+                    <div className="flex justify-center items-center">
+                    <div className="w-1/2 h-96">
                         <Doughnut
                             data={toChartData(byStatus, 'Tasks')}
                             options={doughnutOptions}
                             plugins={[centerTextPlugin]}
-                        />
+                        />   
+                     </div>
+                     </div>
                     )}
                 </div>
 
