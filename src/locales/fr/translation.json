@@ -85,6 +85,7 @@
     "day": "Tâches Créées par Jour",
     "week": "Tâches Créées par Semaine",
     "month": "Tâches Créées par Mois",
+     "no_tasks_message": "Vous n'avez pas encore de tâches",
     "beforeAfter": "Tâches Terminées Avant / Après la Date Limite",
     "before": "Terminées Avant la Date Limite",
     "after": "Terminées Après la Date Limite",

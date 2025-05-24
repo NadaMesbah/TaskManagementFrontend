@@ -83,6 +83,7 @@
     "day": "Tasks Created per Day",
     "week": "Tasks Created per Week",
     "month": "Tasks Created per Month",
+    "no_tasks_message": "You don't have any tasks yet.",
     "employee_comment": "Comment about the task",
     "my_tasks": "My tasks",
     "beforeAfter": "Completed Before vs After Deadline",
