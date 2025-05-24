@@ -16,7 +16,7 @@ const DashboardLink = () => {
   };
 
   return (
-    <button onClick={handleClick} className="text-4xl font-semibold">
+    <button onClick={handleClick} className="text-3xl font-bold">
       {t('dashboard')}
     </button>
   );

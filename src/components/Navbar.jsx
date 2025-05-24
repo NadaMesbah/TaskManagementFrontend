@@ -10,25 +10,26 @@ const Navbar = () => {
   const role = localStorage.getItem("role"); // Adjust if you use context instead
 
   return (
-    <header className="bg-blue-800 text-white px-8 py-5 flex justify-between items-center shadow-md">
+    <header className="bg-gradient-to-r from-[#1d4ed8] via-[#3b82f6] to-[#63a5fa]
+ text-white px-8 py-5 flex justify-between items-center shadow-md">
       <DashboardLink />
       <nav className="flex items-center gap-6">
         <Link
           to="/tasks/all"
-          className="hover:text-blue-300 text-lg font-medium transition duration-150"
+          className="hover:text-indigo-300 text-lg font-medium transition duration-150"
         >
           {t('tasks')}
         </Link>
 
         {role === "EMPLOYEE" && (
-          <Link to="/my-tasks" className="hover:text-blue-300 text-lg font-medium transition duration-150">
+          <Link to="/my-tasks" className="hover:text-indigo-300 text-lg font-medium transition duration-150">
             {t('my_tasks')}
           </Link>
         )}
         {role === "ADMIN" && (
           <Link
             to="/employees/summary"
-            className="hover:text-blue-300 text-lg font-medium transition duration-150"
+            className="hover:text-indigo-300 text-lg font-medium transition duration-150"
           >
             {t('employees')}
           </Link>
@@ -37,7 +38,7 @@ const Navbar = () => {
         {role === "ADMIN" && (
           <Link
             to="/stats"
-            className="hover:text-blue-300 text-lg font-medium transition duration-150"
+            className="hover:text-indigo-300 text-lg font-medium transition duration-150"
 
           >
             {t('stats')}
@@ -48,7 +49,7 @@ const Navbar = () => {
 
         <button
           onClick={() => logout(navigate)}
-          className="bg-white text-blue-800 font-medium px-4 py-2 rounded hover:bg-gray-100 transition duration-150"
+          className="bg-white text-[#1d4ed8] font-medium px-4 py-2 rounded hover:bg-gray-100 transition duration-150"
         >
           {t('logout')}
         </button>

@@ -32,7 +32,7 @@ const Signup = () => {
 
   return (
     <PublicLayout>
-      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <div className="flex min-h-screen pt-8 pb-8 items-center justify-center bg-gray-100">
         <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-xl">
           <h2 className="text-2xl font-semibold text-center text-gray-800">{t("CreateAccount")}</h2>
 
@@ -67,13 +67,13 @@ const Signup = () => {
               <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full mt-1 px-4 py-2 border rounded-lg shadow-sm" placeholder="••••••••" required />
             </div>
 
-            <button type="submit" className="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+            <button type="submit" className="w-full px-4 py-2 text-white bg-[#1d4ed8] rounded-lg hover:bg-[#3b82f6]">
               {t("SignUp")}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-600">
-            {t("AlreadyAccount")} <a href="/login" className="text-blue-600 hover:underline">{t("Login")}</a>
+            {t("AlreadyAccount")} <a href="/login" className="text-[#1d4ed8] hover:underline">{t("Login")}</a>
           </p>
         </div>
       </div>

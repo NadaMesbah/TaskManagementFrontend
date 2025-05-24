@@ -18,11 +18,11 @@ const Login = () => {
 
   return (
     <PublicLayout>
-      <div className="flex min-h-screen items-center justify-center bg-gray-100">
-        <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-xl">
+      <div className="flex h-full pt-24 pb-24 items-center justify-center bg-gray-100">
+        <div className="w-full max-w-md p-8 space-y-5 bg-white shadow-lg rounded-xl">
           <h2 className="text-2xl font-semibold text-center text-gray-800">{t("Login")}</h2>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-8">
             <div>
               <label className="block text-sm font-medium text-gray-700">{t("Email")}</label>
               <input
@@ -47,13 +47,13 @@ const Login = () => {
               />
             </div>
 
-            <button type="submit" className="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition duration-300">
+            <button type="submit" className="w-full px-4 py-2 text-white bg-[#1d4ed8] rounded-lg hover:bg-[#3b82f6] transition duration-300">
               {t("Login")}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-600">
-            {t("NoAccount")} <a href="/signup" className="text-blue-600 hover:underline">{t("SignUp")}</a>
+            {t("NoAccount")} <a href="/signup" className="text-[#1d4ed8] hover:underline">{t("SignUp")}</a>
           </p>
         </div>
       </div>

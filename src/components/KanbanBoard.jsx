@@ -112,7 +112,7 @@ const KanbanBoard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-4xl font-bold text-center mb-8 text-blue-700">{t('task_board')}</h1>
+      <h1 className="text-4xl font-bold text-center mb-8 text-[#1d4ed8]">{t('task_board')}</h1>
 
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="flex space-x-6">

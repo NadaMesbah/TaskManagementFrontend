@@ -24,7 +24,7 @@ const ManageEmployeesPage = () => {
   return (
     <div className="max-w-6xl mx-auto p-4 bg-white mt-12 rounded-2xl shadow-xl">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold text-blue-700">{t('employee_management')}</h2>
+        <h2 className="text-2xl font-bold text-[#1d4ed8]">{t('employee_management')}</h2>
         <button
           onClick={() => navigate("/employees/add")}
           className="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 transition"

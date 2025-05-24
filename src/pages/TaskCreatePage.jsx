@@ -65,7 +65,7 @@ const CreateTaskPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-3xl font-semibold mb-6 text-blue-700">{t('create_task')}</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-[#1d4ed8]">{t('create_task')}</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           <div>

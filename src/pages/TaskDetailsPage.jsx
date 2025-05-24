@@ -97,7 +97,7 @@ const TaskDetailsPage = () => {
 
     return (
         <div className="max-w-3xl mx-auto p-8 bg-white rounded-xl shadow-md mt-10">
-            <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">{t('task_details')}</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center text-[#1d4ed8]">{t('task_details')}</h1>
 
             <form onSubmit={handleSubmit} className="space-y-6">
 

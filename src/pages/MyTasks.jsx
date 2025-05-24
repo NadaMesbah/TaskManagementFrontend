@@ -66,7 +66,7 @@ const MyTasks = () => {
 
     return (
         <div className="min-h-screen bg-gray-100 p-8">
-            <h1 className="text-4xl font-bold text-blue-700 mb-8">{t("my_tasks")}</h1>
+            <h1 className="text-2xl font-bold text-[#1d4ed8] mb-8">{t("my_tasks")}</h1>
 
             {tasks.length === 0 ? (
                 <div className="flex flex-col items-center justify-center mt-20">

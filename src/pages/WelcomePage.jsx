@@ -9,7 +9,7 @@ const WelcomePage = () => {
 
   return (
     <PublicLayout>
-      <div className="flex flex-col items-center justify-center text-center p-10">
+      <div className="flex flex-col items-center justify-center text-center pt-8">
         <img
           src="https://cdn-icons-png.flaticon.com/512/942/942748.png"
           alt="TaskFlow"

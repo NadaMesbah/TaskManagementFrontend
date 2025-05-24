@@ -28,18 +28,19 @@ const PublicLayout = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white">
       {/* Header with toolbar */}
-      <header className="w-full flex justify-between items-center px-8 py-4 bg-white dark:bg-gray-800 shadow">
-        <Link to="/" className="text-2xl font-bold text-blue-700 dark:text-white">
+      <header className="w-full flex justify-between items-center px-8 py-4 bg-[#dbeafe] dark:bg-gray-800 shadow">
+        <Link to="/" style={{ color: "#1d4ed8" }} className="text-2xl font-bold dark:text-white flex flex-row items-center">
+        <img src="/logoapp.png" alt="TF" className="w-20 h-auto"/>
           TaskFlow
         </Link>
 
         <div className="flex items-center gap-4">
           {/* Navigation Links */}
           <nav className="flex gap-4">
-            <Link to="/login" className="font-medium hover:underline text-blue-700 dark:text-white">
+            <Link to="/login" style={{ color: "#1d4ed8" }} className="font-medium hover:underline dark:text-white">
               {t("login")}
             </Link>
-            <Link to="/signup" className="font-medium hover:underline text-blue-700 dark:text-white">
+            <Link to="/signup" style={{ color: "#1d4ed8" }} className="font-medium hover:underline dark:text-white">
               {t("register")}
             </Link>
           </nav>
@@ -58,8 +59,8 @@ const PublicLayout = ({ children }) => {
               onClick={() => changeLanguage("en")}
               className={`px-2 py-1 rounded text-sm ${
                 i18n.language === "en"
-                  ? "bg-blue-700 text-white"
-                  : "text-blue-700 border border-blue-700"
+                  ? "bg-[#1d4ed8] text-white"
+                  : "text-[#1d4ed8] border border-[#1d4ed8]"
               }`}
             >
               EN
@@ -68,8 +69,8 @@ const PublicLayout = ({ children }) => {
               onClick={() => changeLanguage("fr")}
               className={`px-2 py-1 rounded text-sm ${
                 i18n.language === "fr"
-                  ? "bg-blue-700 text-white"
-                  : "text-blue-700 border border-blue-700"
+                  ? "bg-[#1d4ed8] text-white"
+                  : "text-[#1d4ed8] border border-[#1d4ed8]"
               }`}
             >
               FR
@@ -82,7 +83,7 @@ const PublicLayout = ({ children }) => {
       <main className="flex-grow">{children}</main>
 
       {/* Footer */}
-      <footer className="bg-white dark:bg-gray-800 shadow mt-8 p-4 text-center text-sm text-gray-500 dark:text-gray-400">
+      <footer className="bg-[#dbeafe] dark:bg-gray-800 shadow p-4 text-center text-sm text-indigo-500 dark:text-gray-400">
         © {new Date().getFullYear()} {t("task_manager")}. {t("all_rights_are_reserved")}.
       </footer>
     </div>
