@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 
 const AddEmployeePage = () => {
   const [form, setForm] = useState({
+    firstname: "",
+    lastname: "",
     username: "",
     email: "",
     password: "",
@@ -48,6 +50,36 @@ const AddEmployeePage = () => {
       <h2 className="text-2xl font-bold mb-4 text-center text-blue-700">{t('add_employee')}</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="username" className="block mb-1 font-medium">
+          {t('FirstName')}
+          </label>
+          <input
+            id="firstname"
+            type="text"
+            name="firstname"
+            value={form.firstname}
+            onChange={handleChange}
+            required
+            className="w-full border p-2 rounded"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="username" className="block mb-1 font-medium">
+          {t('LastName')}
+          </label>
+          <input
+            id="lastname"
+            type="text"
+            name="lastname"
+            value={form.lastname}
+            onChange={handleChange}
+            required
+            className="w-full border p-2 rounded"
+          />
+        </div>
+
         <div>
           <label htmlFor="username" className="block mb-1 font-medium">
           {t('username')}

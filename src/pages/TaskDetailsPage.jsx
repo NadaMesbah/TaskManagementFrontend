@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
-
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const TaskDetailsPage = () => {
     const { id } = useParams();
@@ -11,8 +11,10 @@ const TaskDetailsPage = () => {
     const [task, setTask] = useState(null);
     const [form, setForm] = useState(null);
     const [employees, setEmployees] = useState([]);
-    const userRole = localStorage.getItem('role');
     const { t } = useTranslation();
+    const { user } = useAuth();
+
+    const userRole = localStorage.getItem('role');
 
     useEffect(() => {
         const fetchTask = async () => {
@@ -50,19 +52,19 @@ const TaskDetailsPage = () => {
         try {
             await axios.post(`http://localhost:8080/tasks/update/${id}`, form);
             Swal.fire({
-              icon: 'success',
-              title: t('taskUpdatedTitle'),
-              text: t('updateSuccess'),
+                icon: 'success',
+                title: t('taskUpdatedTitle'),
+                text: t('updateSuccess'),
             }).then(() => {
-              navigate('/tasks/all');
+                navigate('/tasks/all');
             });
-          } catch (error) {
+        } catch (error) {
             Swal.fire({
-              icon: 'error',
-              title: t('updateFailed'),
-              text: t('updateError'),
+                icon: 'error',
+                title: t('updateFailed'),
+                text: t('updateError'),
             });
-          }          
+        }
     };
 
     const handleDelete = async () => {
@@ -74,24 +76,24 @@ const TaskDetailsPage = () => {
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
             confirmButtonText: t('yesdelete')
-          }).then(async (result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-              try {
-                await axios.delete(`http://localhost:8080/tasks/delete/${id}`);
-                Swal.fire(t('deleteConfirmed'), t('deleteSuccess'), 'success').then(() => {
-                  navigate('/tasks/all');
-                });
-              } catch (error) {
-                Swal.fire(t('failed'), t('deleteError'), 'error');
-              }
+                try {
+                    await axios.delete(`http://localhost:8080/tasks/delete/${id}`);
+                    Swal.fire(t('deleteConfirmed'), t('deleteSuccess'), 'success').then(() => {
+                        navigate('/tasks/all');
+                    });
+                } catch (error) {
+                    Swal.fire(t('failed'), t('deleteError'), 'error');
+                }
             }
-          });
-          
+        });
     };
 
     if (!task || !form) return <div className="p-8">Loading...</div>;
 
     const isAdmin = userRole === 'ADMIN';
+    const isAssignedEmployee = user?.userId === form.assignedEmployeeId;
 
     return (
         <div className="max-w-3xl mx-auto p-8 bg-white rounded-xl shadow-md mt-10">
@@ -152,7 +154,7 @@ const TaskDetailsPage = () => {
                     />
                 </div>
 
-                {/* Actual Duration - to update */} 
+                {/* Actual Duration */}
                 <div>
                     <label className="block font-medium mb-1">{t('actual_duration')}</label>
                     <input
@@ -160,7 +162,21 @@ const TaskDetailsPage = () => {
                         name="actualDuration"
                         value={form.actualDuration}
                         onChange={handleChange}
-                        className="w-full border p-2 rounded-lg"
+                        readOnly={!isAssignedEmployee}
+                        className={`w-full border p-2 rounded-lg ${!isAssignedEmployee ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    />
+                </div>
+
+                {/* Employee Comment */}
+                <div>
+                    <label className="block font-medium mb-1">{t('employee_comment')}</label>
+                    <textarea
+                        name="employeeComment"
+                        value={form.employeeComment || ''}
+                        onChange={handleChange}
+                        readOnly={!isAssignedEmployee}
+                        className={`w-full border p-2 rounded-lg ${!isAssignedEmployee ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                        rows="3"
                     />
                 </div>
 
@@ -216,9 +232,9 @@ const TaskDetailsPage = () => {
                 </div>
 
                 {/* Assigned Employee */}
-                <div>
-                    <label className="block font-medium mb-1">{t('assigned_employee')}</label>
-                    {isAdmin ? (
+                {isAdmin && (
+                    <div>
+                        <label className="block font-medium mb-1">{t('assigned_employee')}</label>
                         <select
                             name="assignedEmployeeId"
                             value={form.assignedEmployeeId}
@@ -232,18 +248,8 @@ const TaskDetailsPage = () => {
                                 </option>
                             ))}
                         </select>
-                    ) : (
-                        <input
-                            type="text"
-                            value={
-                                employees.find((emp) => emp.id === form.assignedEmployeeId)?.username || 'Unassigned'
-                            }
-                            readOnly
-                            disabled
-                            className="w-full border p-2 rounded-lg bg-gray-100 cursor-not-allowed"
-                        />
-                    )}
-                </div>
+                    </div>
+                )}
 
                 {/* Buttons */}
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
@@ -251,7 +257,7 @@ const TaskDetailsPage = () => {
                         type="submit"
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg"
                     >
-                       {t('save_changes')}
+                        {t('save_changes')}
                     </button>
 
                     {isAdmin && (

@@ -17,6 +17,7 @@ import ManageEmployeesPage from "./pages/ManageEmployeesPage";
 import { useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
 import Unauthorized from "./pages/Unauthorized";
+import MyTasks from './pages/MyTasks';
 
 function App() {
     const { loading } = useAuth();
@@ -56,6 +57,7 @@ function App() {
                         <Route path="/tasks/:id" element={<TaskDetailsPage />} />
                         <Route path="/tasks/create" element={<TaskCreatePage />} />
                         <Route path="/employee" element={<EmployeeDashboard />} />
+                        <Route path="/my-tasks" element={<MyTasks />} />
                         {/* <Route path="/employee/tasks" element={<EmployeeTasks />} /> */}
                     </Route>
                     {/* <Route

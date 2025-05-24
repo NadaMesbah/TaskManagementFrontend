@@ -12,7 +12,7 @@ const WelcomePage = () => {
       <div className="flex flex-col items-center justify-center text-center p-10">
         <img
           src="https://cdn-icons-png.flaticon.com/512/942/942748.png"
-          alt="Task Manager"
+          alt="TaskFlow"
           className="w-48 h-48 mb-6"
         />
         <h2 className="text-3xl font-bold text-gray-800 mb-4">

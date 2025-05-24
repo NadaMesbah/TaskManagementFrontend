@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from 'react-i18next';
+import DashboardLink from './DashboardLink';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -10,15 +11,20 @@ const Navbar = () => {
 
   return (
     <header className="bg-blue-800 text-white px-8 py-5 flex justify-between items-center shadow-md">
-      <Link to="/admin" className="text-2xl font-bold">{t('dashboard')}</Link>
+      <DashboardLink />
       <nav className="flex items-center gap-6">
         <Link
           to="/tasks/all"
           className="hover:text-blue-300 text-lg font-medium transition duration-150"
         >
-           {t('tasks')}
+          {t('tasks')}
         </Link>
 
+        {role === "EMPLOYEE" && (
+          <Link to="/my-tasks" className="hover:text-blue-300 text-lg font-medium transition duration-150">
+            {t('my_tasks')}
+          </Link>
+        )}
         {role === "ADMIN" && (
           <Link
             to="/employees/summary"
@@ -27,17 +33,18 @@ const Navbar = () => {
             {t('employees')}
           </Link>
         )}
+
         {role === "ADMIN" && (
           <Link
-          to="/stats"
-          className="hover:text-blue-300 text-lg font-medium transition duration-150"
-      
-        >
-         {t('stats')}
-        </Link>
-          
+            to="/stats"
+            className="hover:text-blue-300 text-lg font-medium transition duration-150"
+
+          >
+            {t('stats')}
+          </Link>
+
         )}
-        
+
 
         <button
           onClick={() => logout(navigate)}

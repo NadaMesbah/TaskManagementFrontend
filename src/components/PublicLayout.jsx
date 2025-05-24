@@ -30,7 +30,7 @@ const PublicLayout = ({ children }) => {
       {/* Header with toolbar */}
       <header className="w-full flex justify-between items-center px-8 py-4 bg-white dark:bg-gray-800 shadow">
         <Link to="/" className="text-2xl font-bold text-blue-700 dark:text-white">
-          {t("task_manager")}
+          TaskFlow
         </Link>
 
         <div className="flex items-center gap-4">
