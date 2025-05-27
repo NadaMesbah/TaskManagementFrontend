@@ -170,9 +170,11 @@ const EmployeeDashboard = () => {
                                   </div>
                                   <div className="text-sm text-gray-500 space-y-1 mt-4">
                                     <p className="flex items-center gap-2">
-                                      <UserIcon className="h-5 w-5 text-gray-500" />
-                                      {getEmployeeUsername(task.assignedEmployeeId)}
-                                    </p>
+                                    <div className="w-8 h-8 rounded-full bg-blue-200 text-blue-800 flex items-center justify-center text-xl font-bold">
+                                      {getEmployeeUsername(task.assignedEmployeeId)?.charAt(0).toUpperCase() || '?'}
+                                    </div>
+                                    <div className='font-bold text-blue-800'>{getEmployeeUsername(task.assignedEmployeeId)}</div>
+                                  </p>
                                   </div>
                                 </div>
                               </Link>

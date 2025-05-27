@@ -18,6 +18,11 @@ import { useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
 import Unauthorized from "./pages/Unauthorized";
 import MyTasks from './pages/MyTasks';
+import ProfilePage from "./pages/ProfilePage";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import EmployeeProfile from "./pages/EmployeeProfile";
+
 
 function App() {
     const { loading } = useAuth();
@@ -38,6 +43,8 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/verify" element={<Verify />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset_password" element={<ResetPassword />} />
                     
                     <Route path="/unauthorized" element={<Unauthorized />} />
 
@@ -58,6 +65,9 @@ function App() {
                         <Route path="/tasks/create" element={<TaskCreatePage />} />
                         <Route path="/employee" element={<EmployeeDashboard />} />
                         <Route path="/my-tasks" element={<MyTasks />} />
+                        <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/employees/:id" element={<EmployeeProfile />} />
+
                         {/* <Route path="/employee/tasks" element={<EmployeeTasks />} /> */}
                     </Route>
                     {/* <Route

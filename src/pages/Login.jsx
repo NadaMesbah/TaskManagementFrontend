@@ -22,7 +22,7 @@ const Login = () => {
         <div className="w-full max-w-md p-8 space-y-5 bg-white shadow-lg rounded-xl">
           <h2 className="text-2xl font-semibold text-center text-gray-800">{t("Login")}</h2>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">{t("Email")}</label>
               <input
@@ -45,15 +45,29 @@ const Login = () => {
                 placeholder="••••••••"
                 required
               />
+              <div className="text-right mt-1">
+                <a
+                  href="/forgot-password"
+                  className="text-sm text-blue-600 hover:underline"
+                >
+                  Mot de passe oublié ?
+                </a>
+              </div>
             </div>
 
-            <button type="submit" className="w-full px-4 py-2 text-white bg-[#1d4ed8] rounded-lg hover:bg-[#3b82f6] transition duration-300">
+            <button
+              type="submit"
+              className="w-full px-4 py-2 text-white bg-[#1d4ed8] rounded-lg hover:bg-[#3b82f6] transition duration-300"
+            >
               {t("Login")}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-600">
-            {t("NoAccount")} <a href="/signup" className="text-[#1d4ed8] hover:underline">{t("SignUp")}</a>
+            {t("NoAccount")}{" "}
+            <a href="/signup" className="text-[#1d4ed8] hover:underline">
+              {t("SignUp")}
+            </a>
           </p>
         </div>
       </div>

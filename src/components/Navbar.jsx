@@ -46,6 +46,14 @@ const Navbar = () => {
 
         )}
 
+        {role === "EMPLOYEE" && (
+          <Link
+            to="/profile"
+            className="hover:text-indigo-300 text-lg font-medium transition duration-150"
+          >
+            Profile
+          </Link>
+        )}
 
         <button
           onClick={() => logout(navigate)}

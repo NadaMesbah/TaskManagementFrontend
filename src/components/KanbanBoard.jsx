@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { UserIcon } from '@heroicons/react/24/solid';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { useAuth } from "../context/AuthContext";
 
 const statuses = ["TODO", "IN_PROGRESS", "COMPLETED", "CLOSED"];
 
@@ -25,6 +26,7 @@ const KanbanBoard = () => {
   const [tasks, setTasks] = useState([]);
   const [employees, setEmployees] = useState([]);
   const { t } = useTranslation();
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchTasks();
@@ -64,12 +66,12 @@ const KanbanBoard = () => {
 
   const handleDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
-  
+
     if (!destination || destination.droppableId === source.droppableId) return;
-  
+
     const draggedTask = tasks.find(task => task.taskId.toString() === draggableId);
     if (!draggedTask) return;
-  
+
     const updatedTaskDto = {
       title: draggedTask.title,
       description: draggedTask.description,
@@ -80,35 +82,35 @@ const KanbanBoard = () => {
       actualDuration: draggedTask.actualDuration,
       assignedEmployeeId: draggedTask.assignedEmployeeId,
     };
-  
+
     try {
       const response = await axios.post(`http://localhost:8080/tasks/update/${draggedTask.taskId}`, updatedTaskDto);
-  
+
       const updatedTask = response.data;
       setTasks(prev =>
         prev.map(t => (t.taskId === updatedTask.taskId ? updatedTask : t))
       );
-  
+
       // SweetAlert on success
       Swal.fire({
-        title: '✅'+t('taskUpdatedTitle'),
-        text: t('movedto')+`${t(destination.droppableId.toLowerCase())}`,
+        title: '✅' + t('taskUpdatedTitle'),
+        text: t('movedto') + `${t(destination.droppableId.toLowerCase())}`,
         icon: 'success',
         timer: 1500,
         showConfirmButton: false
       });
-  
+
     } catch (err) {
       console.error("Error updating task:", err);
       Swal.fire({
-        title: '❌'+t('updateFailed'),
+        title: '❌' + t('updateFailed'),
         text: t('updateError'),
         icon: 'error'
       });
     }
   };
-  
-  
+
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -166,8 +168,10 @@ const KanbanBoard = () => {
 
                                 <div className="text-sm text-gray-500 space-y-1 mt-4">
                                   <p className="flex items-center gap-2">
-                                    <UserIcon className="h-5 w-5 text-gray-500" />
-                                    {getEmployeeUsername(task.assignedEmployeeId)}
+                                    <div className="w-8 h-8 rounded-full bg-blue-200 text-blue-800 flex items-center justify-center text-xl font-bold">
+                                      {getEmployeeUsername(task.assignedEmployeeId)?.charAt(0).toUpperCase() || '?'}
+                                    </div>
+                                    <div className='font-bold text-blue-800'>{getEmployeeUsername(task.assignedEmployeeId)}</div>
                                   </p>
                                 </div>
                               </div>
