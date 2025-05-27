@@ -83,7 +83,7 @@ const PublicLayout = ({ children }) => {
       <main className="flex-grow">{children}</main>
 
       {/* Footer */}
-      <footer className="bg-[#dbeafe] dark:bg-gray-800 shadow p-4 text-center text-sm text-indigo-500 dark:text-gray-400">
+      <footer className="bg-[#dbeafe] dark:bg-gray-800 shadow p-4 text-center text-sm text-blue-500 dark:text-gray-400">
         © {new Date().getFullYear()} {t("task_manager")}. {t("all_rights_are_reserved")}.
       </footer>
     </div>

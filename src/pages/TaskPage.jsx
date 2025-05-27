@@ -50,6 +50,14 @@ const TasksPage = () => {
     return emp ? emp.username : t('unassigned');
   };
 
+  const shortenDescription = (text, maxWords) => {
+    if (!text) return '';
+    const words = text.split(' ');
+    return words.length > maxWords
+      ? words.slice(0, maxWords).join(' ') + '...'
+      : text;
+  };
+
   // Filtrage + Pagination
   const filteredTasks = tasks
     .filter((task) => {
@@ -85,7 +93,7 @@ const TasksPage = () => {
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
-            setCurrentPage(1); // reset page
+            setCurrentPage(1);
           }}
           className="col-span-1 md:col-span-2 border p-2 rounded-lg"
         />
@@ -136,16 +144,32 @@ const TasksPage = () => {
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentTasks.map((task) => (
           <Link to={`/tasks/${task.taskId}`} key={task.taskId}>
-            <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition">
-              <h3 className="text-xl font-bold mb-2 text-gray-800">{task.title}</h3>
-              <p className="text-gray-600 mb-4">{task.description}</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className={`px-3 py-1 rounded-full text-sm ${getPriorityColor(task.priority)}`}>
-                  {t(task.priority.toLowerCase())}
-                </span>
-                <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(task.status)}`}>
-                  {t(task.status.toLowerCase())}
-                </span>
+            <div className="bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition h-[300px] flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl font-bold mb-2 text-gray-800">{task.title}</h3>
+                <p className="text-gray-600 mb-4">
+                  {shortenDescription(task.description, 15)}
+                  <button
+                    style={{
+                      color: 'blue',
+                      border: 'none',
+                      background: 'none',
+                      marginLeft: '5px',
+                      cursor: 'pointer',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    {t('see_more')}
+                  </button>
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className={`px-3 py-1 rounded-full text-sm ${getPriorityColor(task.priority)}`}>
+                    {t(task.priority.toLowerCase())}
+                  </span>
+                  <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(task.status)}`}>
+                    {t(task.status.toLowerCase())}
+                  </span>
+                </div>
               </div>
               <div className="text-sm text-gray-500 space-y-1">
                 <p>{t('deadline')}: {task.deadline}</p>
